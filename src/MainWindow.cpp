@@ -85,7 +85,7 @@ void MainWindow::render() {
     if (recording_) {
         ImGui::PushStyleColor(0, 0xff0000);
     }
-    if (ImGui::Button(recording_ ? u8"\u25A0 \u505C\u6B62" : u8"\u25CF \u8A18\u9332")) {
+    if (ImGui::Button(recording_ ? u8"\u25A0 Stop" : u8"\u25CF Record")) {
         recording_ = !recording_;
         if (recording_) {
             std::time_t t = std::time(nullptr);
