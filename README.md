@@ -20,6 +20,15 @@ cmake -S . -B build
 cmake --build build
 ```
 
+### Running Tests
+
+Unit tests build alongside the main executable. After configuring the project,
+run:
+
+```bash
+ctest --test-dir build
+```
+
 ## Requirements
 
 - C++17 compiler

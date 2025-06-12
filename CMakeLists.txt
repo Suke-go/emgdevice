@@ -9,3 +9,12 @@ file(GLOB SOURCES "src/*.cpp")
 add_executable(emgdevice ${SOURCES})
 
 target_include_directories(emgdevice PUBLIC include)
+
+enable_testing()
+add_executable(test_emgdevice
+    tests/test.cpp
+    src/CSVLogger.cpp
+    src/DataProcessor.cpp
+)
+target_include_directories(test_emgdevice PRIVATE include)
+add_test(NAME unit COMMAND test_emgdevice)
