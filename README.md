@@ -64,6 +64,19 @@ git clone https://github.com/ocornut/imgui include/imgui
 git clone https://github.com/epezent/implot include/implot
 ```
 
+### Custom library locations
+
+If you already have ImGui or ImPlot installed elsewhere, pass their paths when
+running `cmake`:
+
+```bash
+cmake -S . -B build -DIMGUI_DIR=/path/to/imgui -DIMPLOT_DIR=/path/to/implot
+cmake --build build
+```
+
+The variables are optional—if omitted the build falls back to the copies placed
+under `include/`.
+
 With the libraries in place you can run the CMake commands shown above to build
 the GUI application. If the headers are missing the project will still compile
 using stub implementations, but no user interface will be shown.
