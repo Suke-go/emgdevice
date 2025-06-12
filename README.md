@@ -20,6 +20,13 @@ cmake -S . -B build
 cmake --build build
 ```
 
+### Building the GUI
+
+If ImGui and ImPlot are present (see [Installing dependencies](#installing-dependencies)),
+the main executable will include the graphical interface automatically when
+built with the commands above.
+
+
 ### Building with Visual Studio
 
 On Windows you can generate a Visual Studio solution using the provided
@@ -46,6 +53,20 @@ ctest --test-dir build
 
 - C++17 compiler
 - [Dear ImGui](https://github.com/ocornut/imgui) and [ImPlot](https://github.com/epezent/implot)
+
+### Installing dependencies
+
+Download the ImGui and ImPlot source trees and place them under the project's
+`include` directory so the headers are available during compilation:
+
+```bash
+git clone https://github.com/ocornut/imgui include/imgui
+git clone https://github.com/epezent/implot include/implot
+```
+
+With the libraries in place you can run the CMake commands shown above to build
+the GUI application. If the headers are missing the project will still compile
+using stub implementations, but no user interface will be shown.
 
 ## License
 
