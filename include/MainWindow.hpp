@@ -17,4 +17,6 @@ private:
     CSVLogger& logger_;
 
     bool recording_{false};
+    double markerStart_{0.0};
+    double markerEnd_{100.0};
 };
