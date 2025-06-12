@@ -8,7 +8,7 @@ This project implements real-time visualization, processing, and recording of el
 - **Real-Time Processing**: A configurable sliding window feeds the `DataProcessor` class which computes moving averages and RMS values.
 - **Interactive Visualization**: Plot raw waveforms and processed features alongside draggable markers representing the processing window.
 - **GUI Controls**: Adjust the window size from sliders or by dragging the markers; overlap updates automatically.
-- **Data Logging**: Click the GUI button labeled `● 記録` to start saving incoming and processed data to a time-stamped CSV file; the label changes to `■ 停止` while recording.
+- **Data Logging**: Click the GUI button labeled `● Record` to start saving incoming and processed data to a time-stamped CSV file; the label changes to `■ Stop` while recording.
 - **Extensible Architecture**: Modular class design for communication, processing, GUI, and file I/O, allowing new algorithms to be added easily.
 
 ## Building

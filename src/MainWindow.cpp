@@ -57,10 +57,10 @@ void MainWindow::render() {
 
     if (ImPlot::BeginPlot("EMG")) {
         if (!raw.empty()) {
-            ImPlot::PlotLine("Raw", raw.data(), raw.size());
+            ImPlot::PlotLine("Raw", raw.data(), static_cast<int>(raw.size()));
         }
         if (!rms.empty()) {
-            ImPlot::PlotLine("RMS", rms.data(), rms.size());
+            ImPlot::PlotLine("RMS", rms.data(), static_cast<int>(rms.size()));
         }
 
         ImPlot::DragLineX("Start", &markerStart_);
@@ -85,12 +85,18 @@ void MainWindow::render() {
     if (recording_) {
         ImGui::PushStyleColor(0, 0xff0000);
     }
-    if (ImGui::Button(recording_ ? u8"■ 停止" : u8"● 記録")) {
+    if (ImGui::Button(recording_ ? u8"\u25A0 Stop" : u8"\u25CF Record")) {
         recording_ = !recording_;
         if (recording_) {
             std::time_t t = std::time(nullptr);
+            std::tm tm{};
+#ifdef _WIN32
+            localtime_s(&tm, &t);
+#else
+            localtime_r(&t, &tm);
+#endif
             char buf[64];
-            std::strftime(buf, sizeof(buf), "EMG_data_%Y-%m-%d_%H-%M-%S.csv", std::localtime(&t));
+            std::strftime(buf, sizeof(buf), "EMG_data_%Y-%m-%d_%H-%M-%S.csv", &tm);
             logger_.open(buf);
         } else {
             logger_.close();
