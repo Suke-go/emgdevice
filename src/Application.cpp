@@ -6,7 +6,7 @@
 #include "MainWindow.hpp"
 
 Application::Application()
-    : serial_(std::make_unique<SerialCommunicator>()),
+    : serial_(std::make_unique<SerialCommunicator>("COM1", 115200)),
       processor_(std::make_unique<DataProcessor>()),
       logger_(std::make_unique<CSVLogger>()),
       window_(std::make_unique<MainWindow>(*serial_, *processor_, *logger_)) {}
