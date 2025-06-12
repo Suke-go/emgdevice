@@ -2,6 +2,7 @@
 #include "SerialCommunicator.hpp"
 #include "DataProcessor.hpp"
 #include "CSVLogger.hpp"
+#include <ctime>
 #if __has_include(<imgui.h>)
 #  include <imgui.h>
 #else
@@ -10,6 +11,9 @@ struct ImVec2 { float x; float y; };
 inline void Begin(const char*) {}
 inline void End() {}
 inline bool SliderInt(const char*, int*, int, int) { return false; }
+inline bool Button(const char*) { return false; }
+inline void PushStyleColor(int, int) {}
+inline void PopStyleColor() {}
 inline ImVec2 GetMousePos() { return ImVec2{0,0}; }
 }
 #endif
@@ -76,6 +80,24 @@ void MainWindow::render() {
     }
     if (dragged != processor_.windowSize()) {
         processor_.setWindowSize(dragged);
+    }
+
+    if (recording_) {
+        ImGui::PushStyleColor(0, 0xff0000);
+    }
+    if (ImGui::Button(recording_ ? u8"■ 停止" : u8"● 記録")) {
+        recording_ = !recording_;
+        if (recording_) {
+            std::time_t t = std::time(nullptr);
+            char buf[64];
+            std::strftime(buf, sizeof(buf), "EMG_data_%Y-%m-%d_%H-%M-%S.csv", std::localtime(&t));
+            logger_.open(buf);
+        } else {
+            logger_.close();
+        }
+    }
+    if (recording_) {
+        ImGui::PopStyleColor();
     }
 
     ImGui::End();

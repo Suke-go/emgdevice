@@ -11,6 +11,8 @@ public:
                CSVLogger& logger);
     void render();
 
+    bool isRecording() const { return recording_; }
+
 private:
     SerialCommunicator& serial_;
     DataProcessor& processor_;
