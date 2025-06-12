@@ -20,6 +20,19 @@ cmake -S . -B build
 cmake --build build
 ```
 
+### Building with Visual Studio
+
+On Windows you can generate a Visual Studio solution using the provided
+`CMakePresets.json` file:
+
+```bash
+cmake --preset vs2022
+cmake --build --preset vs2022
+```
+
+This produces `emgdevice.sln` in the `build` directory which can be opened
+directly in Visual Studio for further development or debugging.
+
 ### Running Tests
 
 Unit tests build alongside the main executable. After configuring the project,
