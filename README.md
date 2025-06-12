@@ -57,12 +57,19 @@ ctest --test-dir build
 ### Installing dependencies
 
 Download the ImGui and ImPlot source trees and place them under the project's
-`include` directory so the headers are available during compilation:
+`include` directory so the headers are available during compilation. Create the
+subdirectories `include/imgui` and `include/implot` so that files such as
+`imgui.h` and `implot.h` reside directly inside those folders.
 
 ```bash
 git clone https://github.com/ocornut/imgui include/imgui
 git clone https://github.com/epezent/implot include/implot
 ```
+
+Cloning the repositories copies all required `*.h` and `*.cpp` files (e.g.
+`imgui.cpp`, `imgui_draw.cpp`, `implot.cpp`, `implot_items.cpp`) along with the
+`imstb_*` headers used by ImGui. Alternatively copy these files manually if you
+already maintain local versions of the libraries.
 
 ### Custom library locations
 
