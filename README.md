@@ -57,7 +57,10 @@ ctest --test-dir build
 ### Installing dependencies
 
 Download the ImGui and ImPlot source trees and place them under the project's
-`include` directory so the headers are available during compilation:
+`include` directory so both the headers and `*.cpp` files are available during
+compilation. When these directories are detected CMake will automatically build
+the libraries as part of the application.
+
 Cloning the repositories copies all required `*.h` and `*.cpp` files (e.g.
 `imgui.cpp`, `imgui_draw.cpp`, `implot.cpp`, `implot_items.cpp`) along with the
 `imstb_*` headers used by ImGui. Alternatively copy these files manually if you
@@ -82,8 +85,10 @@ The variables are optional—if omitted the build falls back to the copies place
 under `include/`.
 
 With the libraries in place you can run the CMake commands shown above to build
-the GUI application. If the headers are missing the project will still compile
-using stub implementations, but no user interface will be shown.
+the GUI application. CMake automatically compiles any source files found in the
+specified directories so no additional build steps are necessary. If the
+libraries are missing the project will still compile using stub
+implementations, but no user interface will be shown.
 
 ## License
 
