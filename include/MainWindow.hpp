@@ -15,4 +15,6 @@ private:
     SerialCommunicator& serial_;
     DataProcessor& processor_;
     CSVLogger& logger_;
+
+    bool recording_{false};
 };

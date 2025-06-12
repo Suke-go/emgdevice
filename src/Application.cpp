@@ -23,6 +23,7 @@ int Application::run() {
         if (!samples.empty()) {
             processor_->processSamples(samples);
         }
+        window_->render();
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
     return 0;

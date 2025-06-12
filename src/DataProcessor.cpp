@@ -15,6 +15,10 @@ void DataProcessor::setOverlap(size_t overlap) {
 
 void DataProcessor::processSamples(const std::vector<float>& samples) {
     buffer_.insert(buffer_.end(), samples.begin(), samples.end());
+    rawHistory_.insert(rawHistory_.end(), samples.begin(), samples.end());
+    if (rawHistory_.size() > rawHistorySize_) {
+        rawHistory_.erase(rawHistory_.begin(), rawHistory_.begin() + (rawHistory_.size() - rawHistorySize_));
+    }
 
     while (buffer_.size() >= windowSize_) {
         std::vector<float> window(buffer_.begin(), buffer_.begin() + windowSize_);
@@ -32,6 +36,10 @@ void DataProcessor::processSample(float sample) {
 
 const std::vector<float>& DataProcessor::processed() const {
     return processed_;
+}
+
+const std::vector<float>& DataProcessor::raw() const {
+    return rawHistory_;
 }
 
 float DataProcessor::computeMovingAverage(const std::vector<float>& window) const {

@@ -7,6 +7,7 @@ This project implements real-time visualization, processing, and recording of el
 - **Serial Data Acquisition**: Connect to a COM port and stream EMG data with adjustable serial settings.
 - **Real-Time Processing**: A configurable sliding window feeds the `DataProcessor` class which computes moving averages and RMS values.
 - **Interactive Visualization**: Plot raw waveforms and processed features alongside a movable time-window marker.
+- **GUI Controls**: Adjust the window size and overlap from sliders while watching the chart update in real time.
 - **Data Logging**: Save incoming and processed data to time-stamped CSV files via a toggle button in the GUI.
 - **Extensible Architecture**: Modular class design for communication, processing, GUI, and file I/O, allowing new algorithms to be added easily.
 
