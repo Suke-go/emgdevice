@@ -3,11 +3,15 @@
 #include "DataProcessor.hpp"
 #include "CSVLogger.hpp"
 #include <ctime>
+#include <type_traits>
 #if __has_include(<imgui.h>)
 #  include <imgui.h>
 #else
-namespace ImGui {
 struct ImVec2 { float x; float y; };
+struct ImVec4 { float x, y, z, w; ImVec4(float a=0, float b=0, float c=0, float d=0)
+        : x(a), y(b), z(c), w(d) {}
+};
+namespace ImGui {
 inline void Begin(const char*) {}
 inline void End() {}
 inline bool SliderInt(const char*, int*, int, int) { return false; }
@@ -15,6 +19,8 @@ inline bool Button(const char*) { return false; }
 inline void PushStyleColor(int, int) {}
 inline void PopStyleColor() {}
 inline ImVec2 GetMousePos() { return ImVec2{0,0}; }
+using ImGuiID = unsigned int;
+inline ImGuiID GetID(const char*) { return 0; }
 }
 #endif
 
@@ -25,9 +31,44 @@ namespace ImPlot {
 inline bool BeginPlot(const char*) { return true; }
 inline void EndPlot() {}
 inline void PlotLine(const char*, const float*, int) {}
-inline bool DragLineX(const char*, double*, bool=true) { return false; }
+using ImVec4 = ::ImVec4;
+enum ImPlotDragToolFlags_ { ImPlotDragToolFlags_None = 0 };
+using ImPlotDragToolFlags = int;
+inline bool DragLineX(const char*, double*, bool = true) { return false; }
+inline bool DragLineX(int, double*, const ImVec4& = ImVec4(), float = 1.0f,
+                      ImPlotDragToolFlags = ImPlotDragToolFlags_None,
+                      bool* = nullptr, bool* = nullptr, bool* = nullptr) {
+    return false;
+}
 }
 #endif
+
+namespace {
+template <typename, typename = void>
+struct has_old_draglinex_impl : std::false_type {};
+template <typename Dummy>
+struct has_old_draglinex_impl<
+    Dummy,
+    std::void_t<decltype(ImPlot::DragLineX("", (double*)nullptr, true))>>
+    : std::true_type {};
+constexpr bool has_old_draglinex = has_old_draglinex_impl<void>::value;
+
+template <typename, typename = void>
+struct has_new_draglinex_impl : std::false_type {};
+template <typename Dummy>
+struct has_new_draglinex_impl<
+    Dummy,
+    std::void_t<decltype(ImPlot::DragLineX(
+        0,
+        (double*)nullptr,
+        ::ImVec4{},
+        1.0f,
+        0,
+        (bool*)nullptr,
+        (bool*)nullptr,
+        (bool*)nullptr))>> : std::true_type {};
+constexpr bool has_new_draglinex = has_new_draglinex_impl<void>::value;
+}
 
 MainWindow::MainWindow(SerialCommunicator& serial,
                        DataProcessor& processor,
@@ -63,8 +104,18 @@ void MainWindow::render() {
             ImPlot::PlotLine("RMS", rms.data(), static_cast<int>(rms.size()));
         }
 
-        ImPlot::DragLineX("Start", &markerStart_);
-        ImPlot::DragLineX("End", &markerEnd_);
+        // Support both old and new ImPlot signatures for DragLineX.
+        if constexpr (has_new_draglinex) {
+            ImPlot::DragLineX(ImGui::GetID("Start"), &markerStart_,
+                              ImVec4(1, 0, 0, 1), 1.0f,
+                              0, nullptr, nullptr, nullptr);
+            ImPlot::DragLineX(ImGui::GetID("End"), &markerEnd_,
+                              ImVec4(0, 1, 0, 1), 1.0f,
+                              0, nullptr, nullptr, nullptr);
+        } else if constexpr (has_old_draglinex) {
+            ImPlot::DragLineX("Start", &markerStart_, true);
+            ImPlot::DragLineX("End", &markerEnd_, true);
+        }
 
         ImPlot::EndPlot();
     }
